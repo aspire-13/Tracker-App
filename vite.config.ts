@@ -8,12 +8,14 @@ import { VitePWA } from 'vite-plugin-pwa';
 process.env.TZ = 'Europe/Berlin';
 
 export default defineConfig({
+  // Относительные пути: сборку можно выложить в любую подпапку (например, GitHub Pages).
+  base: './',
   plugins: [
     react(),
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg'],
+      includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'Трекер привычек',
         short_name: 'Привычки',
@@ -22,12 +24,12 @@ export default defineConfig({
         start_url: '.',
         scope: '.',
         display: 'standalone',
-        background_color: '#0f172a',
+        background_color: '#f8fafc',
         theme_color: '#10b981',
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
     }),

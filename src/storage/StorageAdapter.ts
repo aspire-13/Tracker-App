@@ -9,4 +9,6 @@ export interface StorageAdapter {
   load(): Promise<AppData | null>;
   save(data: AppData): Promise<void>;
   clear(): Promise<void>;
+  /** Необязательно: уведомлять об изменениях, сделанных вне приложения (другая вкладка, сервер). */
+  subscribe?(onChange: (data: AppData) => void): () => void;
 }

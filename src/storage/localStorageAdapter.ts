@@ -23,5 +23,18 @@ export function createLocalStorageAdapter(storage: Storage = window.localStorage
     async clear() {
       storage.removeItem(key);
     },
+    subscribe(onChange) {
+      // Событие storage приходит только из других вкладок того же сайта.
+      const handler = (e: StorageEvent) => {
+        if (e.key !== key || e.newValue === null) return;
+        try {
+          onChange(parseAppData(JSON.parse(e.newValue)));
+        } catch (err) {
+          console.error('Некорректные данные из другой вкладки', err);
+        }
+      };
+      window.addEventListener('storage', handler);
+      return () => window.removeEventListener('storage', handler);
+    },
   };
 }

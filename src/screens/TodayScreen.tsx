@@ -80,7 +80,9 @@ export function TodayScreen() {
           </p>
           <p className="text-sm text-slate-500 dark:text-slate-400">
             {progress.total === 0
-              ? 'На этот день ничего не запланировано'
+              ? due.length > 0
+                ? 'Уважительный пропуск — серии не прервутся'
+                : 'На этот день ничего не запланировано'
               : progress.done === progress.total
                 ? 'Все привычки выполнены 🎉'
                 : 'привычек выполнено'}

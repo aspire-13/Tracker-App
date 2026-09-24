@@ -57,6 +57,16 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  // Данные изменили в другой вкладке — подхватываем их, не сохраняя обратно.
+  useEffect(
+    () =>
+      storage.subscribe?.((external) => {
+        skipNextSave.current = true;
+        dispatch({ type: 'data/replace', data: external });
+      }),
+    [],
+  );
+
   useEffect(() => {
     if (!loaded) return;
     // Первое срабатывание после загрузки — это те же данные, сохранять незачем.

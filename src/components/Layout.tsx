@@ -45,7 +45,7 @@ export function PageHeader({ title, subtitle, left, right }: { title: string; su
     <header className="mb-4 flex min-h-12 items-center gap-2">
       {left}
       <div className="min-w-0 flex-1">
-        <h1 className="truncate text-2xl font-bold tracking-tight">{title}</h1>
+        <h1 className={`line-clamp-2 font-bold tracking-tight break-words ${title.length > 16 ? 'text-xl leading-tight' : 'text-2xl'}`}>{title}</h1>
         {subtitle && <p className="truncate text-sm text-slate-500 dark:text-slate-400">{subtitle}</p>}
       </div>
       {right}

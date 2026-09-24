@@ -5,6 +5,7 @@ import { Layout } from './components/Layout';
 import { TodayScreen } from './screens/TodayScreen';
 import { HabitsScreen } from './screens/HabitsScreen';
 import { HabitFormScreen } from './screens/HabitFormScreen';
+import { HabitDetailScreen } from './screens/HabitDetailScreen';
 
 function Screens() {
   const route = useRoute();
@@ -23,8 +24,10 @@ function Screens() {
       screen = <HabitFormScreen key="new" />;
       break;
     case 'habitEdit':
-    case 'habitDetail':
       screen = <HabitFormScreen key={route.id} id={route.id} />;
+      break;
+    case 'habitDetail':
+      screen = <HabitDetailScreen key={route.id} id={route.id} />;
       break;
     default:
       screen = <p className="py-12 text-center text-slate-500">Раздел в разработке</p>;

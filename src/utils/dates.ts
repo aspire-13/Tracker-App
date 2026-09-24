@@ -89,3 +89,10 @@ export function formatDayMonth(key: DateKey): string {
   const d = fromKey(key);
   return `${d.getDate()} ${MONTH_GENITIVE[d.getMonth()]}`;
 }
+
+/** Сколько дней назад можно отмечать выполнение. */
+export const BACKFILL_DAYS = 7;
+
+export function canEditDate(key: DateKey, today: DateKey): boolean {
+  return key <= today && key >= addDays(today, -BACKFILL_DAYS);
+}

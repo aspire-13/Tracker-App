@@ -1,6 +1,6 @@
 import type { DateKey, Habit, Weekday } from '../types';
 import { addDays, maxKey, minKey, weekday, weekStart } from './dates';
-import { type CompletionMap, isScheduled, trackingEnd, trackingStart } from './streaks';
+import { type CompletionMap, isDueOn, isScheduled, trackingEnd, trackingStart } from './streaks';
 
 export interface Rate {
   done: number;
@@ -159,4 +159,25 @@ export function bestAndWorstWeekdays(stats: readonly WeekdayStat[]): {
   const worst = sorted[sorted.length - 1];
   if (ratio(best) === ratio(worst)) return { best: null, worst: null };
   return { best, worst };
+}
+
+export interface DayProgress {
+  done: number;
+  /** Сколько привычек запланировано на день, без уважительных пропусков. */
+  total: number;
+}
+
+/** Прогресс дня для экрана «Сегодня»: сколько из запланированных привычек выполнено. */
+export function dayProgress(habits: readonly Habit[], index: CompletionIndex, key: DateKey): DayProgress {
+  let done = 0;
+  let total = 0;
+  for (const h of habits) {
+    const completions = index.get(h.id) ?? EMPTY_MAP;
+    if (!isDueOn(h, completions, key)) continue;
+    const status = completions.get(key);
+    if (status === 'skipped') continue;
+    total++;
+    if (status === 'done') done++;
+  }
+  return { done, total };
 }

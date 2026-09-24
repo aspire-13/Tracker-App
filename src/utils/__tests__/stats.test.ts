@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bestAndWorstWeekdays, habitRate, percent, rollingRate, weekdayStats } from '../stats';
+import { bestAndWorstWeekdays, dayProgress, habitRate, percent, rollingRate, weekdayStats } from '../stats';
 import { groupCompletions } from '../streaks';
 import { rangeKeys } from '../dates';
 import { completions, habit, marks } from './helpers';
@@ -80,5 +80,21 @@ describe('weekdayStats', () => {
     const done = rangeKeys('2026-08-31', '2026-09-13');
     const stats = weekdayStats([h], groupCompletions(completions(done)), '2026-09-13', 14);
     expect(bestAndWorstWeekdays(stats)).toEqual({ best: null, worst: null });
+  });
+});
+
+describe('dayProgress', () => {
+  it('считает выполненные из запланированных, уважительные пропуски исключает', () => {
+    const habits = [
+      habit({ type: 'daily' }, '2026-09-01', { id: 'a' }),
+      habit({ type: 'daily' }, '2026-09-01', { id: 'b' }),
+      habit({ type: 'daily' }, '2026-09-01', { id: 'c' }),
+      habit({ type: 'weekdays', days: [6] }, '2026-09-01', { id: 'd' }), // только Вс
+    ];
+    const index = groupCompletions([
+      ...completions(['2026-09-10'], [], 'a'),
+      ...completions([], ['2026-09-10'], 'b'),
+    ]);
+    expect(dayProgress(habits, index, '2026-09-10')).toEqual({ done: 1, total: 2 });
   });
 });
